@@ -18,6 +18,11 @@ private:
     char recvBuff[1024];
     // 检查权限
     bool checkHighPermission(const string& password) {
+        if (!needLowLevelPermission(nowLevelPermission)) {
+            sendMessage(socket, "权限不足");
+            return false;
+
+        }
 
         if (checkHighLevelPermission(password)) {
             nowLevelPermission = HIGH_LEVEL_PERMISSION;
@@ -34,6 +39,37 @@ private:
     }
 
     bool downloadFile(const string& filename) {
+        return true;
+    }
+
+    // 查看当前目录下的文件
+    bool listCWDFiles() {
+        if (!needLowLevelPermission(nowLevelPermission)) {
+            sendMessage(socket, "权限不足");
+            return false;
+
+        }
+
+        string command = "dir";
+        FILE* pipe = _popen(command.c_str(), "r");
+        if (!pipe) {
+            sendMessage(socket, "执行dir命令失败");
+            return false;
+        }
+
+        string result;
+        char buffer[128];
+        while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
+            result += buffer;
+        }
+        _pclose(pipe);
+
+        sendMessage(socket, result.c_str());
+        return true;
+    }
+
+    // 查看指定目录下的文件
+    bool listFiles(const string& path) {
         return true;
     }
 public:
@@ -84,6 +120,14 @@ public:
         // 检查权限
         else if (cmd.operation == "check") {
             return checkHighPermission(cmd.args[0]);
+        }
+        // 查看当前目录下的文件
+        else if (cmd.operation == "listcwd") {
+            return listCWDFiles();
+        }
+        // 查看指定目录下的文件
+        else if (cmd.operation == "list") {
+            return listFiles(cmd.args[0]);
         }
         return false;
     }

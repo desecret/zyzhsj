@@ -1,3 +1,5 @@
+#pragma once
+
 #include <winsock2.h>
 #include <iostream>
 
@@ -100,6 +102,42 @@ public:
     sendBuff: 发送的数据
     len: 发送的数据长度
 */
-int sendMessage(Socket server, char *sendBuff) {
-    return server.Send(sendBuff, sizeof(sendBuff));
+// int sendMessage(Socket server, char *sendBuff) {
+//     return server.Send(sendBuff, sizeof(sendBuff));
+// }
+
+void initServer(Socket& server) {
+    // 创建Socket对象
+    // Socket server;
+
+    // 初始化Winsock
+    if (!server.Initialize()) {
+        throw std::runtime_error("Socket initialization failed");
+    }
+
+    // 创建socket
+    if (!server.CreateSocket()) {
+        throw std::runtime_error("Socket creation failed");
+    }
+
+    // 绑定socket到端口
+    unsigned short port = PORT; // 你可以选择任何未被占用的端口
+    if (!server.BindSocket(port)) {
+        throw std::runtime_error("Socket binding failed");
+    }
+
+    // 监听socket
+    if (!server.Listen()) {
+        throw std::runtime_error("Socket listening failed");
+    }
+
+    std::cout << "Server is listening on port " << port << std::endl;
+
+    // 接受客户端连接
+    SOCKET newSocket = server.Accept();
+    if (newSocket == INVALID_SOCKET) {
+        throw std::runtime_error("Socket accepting failed");
+    }
+
+    // return server;
 }

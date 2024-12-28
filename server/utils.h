@@ -1,6 +1,9 @@
+#pragma once
+
 #include <string>
 #include <winsock2.h>
 #include <iostream>
+
 #include "socket.h"
 #include "defineWords.h"
 #include "des.h"
@@ -22,8 +25,8 @@ bool checkLowLevelPermission(const char* password) {
 
 bool checkHighLevelPermission(const string& password) {
     // 去掉第一个字符
-    string str = password.substr(1);
-    string result = getDesEncryptResult(str);
+    // string str = password.substr(1);
+    string result = getDesEncryptResult(password);
     cout << "result: " << result << endl;
     return HIGH_LEVEL_PASSWORD == result;
 }
@@ -35,38 +38,10 @@ bool ifContinueCheckHighPermission(const char* receiveBuff) {
     return receiveBuff[0] == '1';
 }
 
-Socket initSocket() {
-    // 创建Socket对象
-    Socket server;
+bool needLowLevelPermission(const char nowLevelPermission) {
+    return nowLevelPermission != DEFAULT_LOW_LEVEL_PERMISSION;
+}
 
-    // 初始化Winsock
-    if (!server.Initialize()) {
-        throw std::runtime_error("Socket initialization failed");
-    }
-
-    // 创建socket
-    if (!server.CreateSocket()) {
-        throw std::runtime_error("Socket creation failed");
-    }
-
-    // 绑定socket到端口
-    unsigned short port = PORT; // 你可以选择任何未被占用的端口
-    if (!server.BindSocket(port)) {
-        throw std::runtime_error("Socket binding failed");
-    }
-
-    // 监听socket
-    if (!server.Listen()) {
-        throw std::runtime_error("Socket listening failed");
-    }
-
-    std::cout << "Server is listening on port " << port << std::endl;
-
-    // 接受客户端连接
-    SOCKET newSocket = server.Accept();
-    if (newSocket == INVALID_SOCKET) {
-        throw std::runtime_error("Socket accepting failed");
-    }
-
-    return server;
+bool needHighLevelPermission(const char nowLevelPermission) {
+    return nowLevelPermission == HIGH_LEVEL_PERMISSION;
 }
