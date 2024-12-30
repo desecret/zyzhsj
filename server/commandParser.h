@@ -207,7 +207,7 @@ public:
         // 下载文件
         if (cmd.operation == "download") {
             if (cmd.args.size() < 1) {
-                cout << "用法: download <filename>" << endl;
+                sendMessage(socket, "用法: download <filename>");
                 return false;
             }
             // 处理下载
@@ -216,7 +216,7 @@ public:
         // 上传文件
         else if (cmd.operation == "upload") {
             if (cmd.args.size() < 1) {
-                cout << "用法: upload <filename>" << endl;
+                sendMessage(socket, "用法: upload <filename>");
                 return false;
             }
             // 处理上传
@@ -224,18 +224,34 @@ public:
         }
         // 检查权限
         else if (cmd.operation == "check") {
+            if (cmd.args.size() < 1) {
+                sendMessage(socket, "用法: check <password>");
+                return false;
+            }
             return checkHighPermission(cmd.args[0]);
         }
         // 查看当前目录下的文件
         else if (cmd.operation == "listcwd") {
+            if (cmd.args.size() > 0) {
+                sendMessage(socket, "用法: listcwd");
+                return false;
+            }
             return listCWDFiles();
         }
         // 查看指定目录下的文件
         else if (cmd.operation == "list") {
+            if (cmd.args.size() < 1) {
+                sendMessage(socket, "用法: list <path>");
+                return false;
+            }
             return listFiles(cmd.args[0]);
         }
         // 加密指定文件
         else if (cmd.operation == "encrypt") {
+            if (cmd.args.size() < 1) {
+                sendMessage(socket, "用法: encrypt <filename>");
+                return false;
+            }
             return encryptFile(cmd.args[0]);
         }
         return false;

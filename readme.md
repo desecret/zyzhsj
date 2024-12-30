@@ -2,7 +2,7 @@
 
 ## 支持的命令
 ### 低级权限
-验证高级权限密码：`check <密码>`
+验证高级权限密码：`check <password>`
 
 从服务器端下载文件：`download <filename>`
 
