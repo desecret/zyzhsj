@@ -18,7 +18,7 @@ bool checkPassword(const char* password, const char* correctPassword) {
 }
 
 bool checkLowLevelPermission(const char* password) {
-    // password++;
+    password++;
     cout << "password: " << password << endl;
     return checkPassword(password, LOW_LEVEL_PASSWORD);
 }

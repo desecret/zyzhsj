@@ -10,7 +10,7 @@ char* buffer;	//缓冲区保存文件数据
 //long recvSize = 10000000;
 //char* recvBuf;
 
-bool sendFile(Socket& s, const char* fileName)
+bool sendFile(SOCKET s, const char* fileName)
 {
 	FILE* read = fopen(fileName, "rb");
 	if (!read)
@@ -37,25 +37,25 @@ bool sendFile(Socket& s, const char* fileName)
 	int ret = 0;
 	while ((nCount = fread(buffer, 1, bufSize, read)) > 0)	//循环读取文件进行传送
 	{
-		ret += s.Send(buffer, nCount);
+		ret += send(s, buffer, nCount, 0);
 		if (ret == SOCKET_ERROR)
 		{
 			perror("sendFile");
 			return false;
 		}
 	}
-	s.CloseConnection();
-	s.Receive(buffer, bufSize);
+	shutdown(s, SD_SEND);
+	recv(s, buffer, bufSize, 0);
 	fclose(read);
 
 	cout << "send file success!"<<" Byte:"<<ret << endl;
-	// system("pause");
+	system("pause");
 	return true;
 }
 
-bool recvFile(Socket& s, const char* fileName)
+bool recvFile(SOCKET s, const char* fileName)
 {
-
+	
 	if (buffer == NULL)
 	{
 		buffer = new char[bufSize];
@@ -72,7 +72,7 @@ bool recvFile(Socket& s, const char* fileName)
 
 	int ret = 0;
 	int nCount;
-	while ((nCount = s.Receive(buffer, bufSize)) > 0)	//循环接收文件并保存
+	while ((nCount = recv(s, buffer, bufSize, 0)) > 0)	//循环接收文件并保存
 	{
 		ret += fwrite(buffer,nCount, 1, write);
 	}
@@ -89,6 +89,6 @@ bool recvFile(Socket& s, const char* fileName)
 
 	fclose(write);
 	cout << "save file success! Filename:"<<fileName << endl;
-	// system("pause");
+	system("pause");
 	return true;
 }
