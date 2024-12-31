@@ -30,7 +30,7 @@ int main() {
         if (checkLowLevelPermission(recvBuff)) {
             NOW_LEVEL_PERMISSION = LOW_LEVEL_PERMISSION;
             sendMessage(server, "低级权限验证成功，请输入指令");
-
+            sendMessage(server, getSupportCommandMsg().c_str());
         } else {
             sendMessage(server, "低级权限验证失败，请重新输入密码");
             continue;
@@ -56,6 +56,7 @@ int main() {
             sendMessage(server, "命令执行成功");
         } else {
             sendMessage(server, "命令执行失败");
+            sendMessage(server, getSupportCommandMsg().c_str());
         }
     }
 

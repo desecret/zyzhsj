@@ -28,6 +28,7 @@ private:
         if (checkHighLevelPermission(password)) {
             nowLevelPermission = HIGH_LEVEL_PERMISSION;
             sendMessage(socket, "高级权限验证成功，请输入指令");
+            sendMessage(socket, getSupportCommandMsg().c_str());
             return true;
         } else {
             sendMessage(socket, "高级权限验证失败");

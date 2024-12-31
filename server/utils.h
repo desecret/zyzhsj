@@ -45,3 +45,16 @@ bool needLowLevelPermission(const char nowLevelPermission) {
 bool needHighLevelPermission(const char nowLevelPermission) {
     return nowLevelPermission == HIGH_LEVEL_PERMISSION;
 }
+
+string getSupportCommandMsg() {
+    string errorMsg = "支持的命令如下:\n";
+    errorMsg += "低级权限命令:\n";
+    errorMsg += "  check <password> - 验证高级权限密码\n";
+    errorMsg += "  download <filename> - 从服务器下载文件\n";
+    errorMsg += "  listcwd - 查看当前目录下的文件\n";
+    errorMsg += "高级权限命令:\n"; 
+    errorMsg += "  upload <filename> - 上传文件到服务器\n";
+    errorMsg += "  encrypt <filename> - 加密指定文件\n";
+    errorMsg += "  list <path> - 获取指定路径下的所有文件";
+    return errorMsg;
+}
