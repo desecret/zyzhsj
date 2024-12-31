@@ -27,18 +27,18 @@ private:
 
         if (checkHighLevelPermission(password)) {
             nowLevelPermission = HIGH_LEVEL_PERMISSION;
-            sendMessage(socket, "高级权限验证成功，请输入指令");
+            sendMessage(socket, "高级权限验证成功，请输入指令\n");
             sendMessage(socket, getSupportCommandMsg().c_str());
             return true;
         } else {
-            sendMessage(socket, "高级权限验证失败");
+            sendMessage(socket, "高级权限验证失败\n");
             return false;
         }
     }
 
     bool uploadFile(const string& filename) {
        if (!needHighLevelPermission(nowLevelPermission)) {
-            sendMessage(socket, "权限不足");
+            sendMessage(socket, "权限不足\n");
             return false;
        }
        

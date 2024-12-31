@@ -15,7 +15,7 @@ int main() {
     char recvBuff[1024];
     int recvSize;
 
-    sendMessage(server, "低级权限验证开始，请输入密码");
+    sendMessage(server, "低级权限验证开始，请输入密码\n");
 
 
     // 接收数据
@@ -29,10 +29,10 @@ int main() {
         //低级权限
         if (checkLowLevelPermission(recvBuff)) {
             NOW_LEVEL_PERMISSION = LOW_LEVEL_PERMISSION;
-            sendMessage(server, "低级权限验证成功，请输入指令");
+            sendMessage(server, "低级权限验证成功，请输入指令\n");
             sendMessage(server, getSupportCommandMsg().c_str());
         } else {
-            sendMessage(server, "低级权限验证失败，请重新输入密码");
+            sendMessage(server, "低级权限验证失败，请重新输入密码\n");
             continue;
         }
 
@@ -53,9 +53,9 @@ int main() {
         auto cmd = commandParser.parse(recvBuff);
         bool result = commandParser.execute(cmd);
         if (result) {
-            sendMessage(server, "命令执行成功");
+            sendMessage(server, "命令执行成功\n");
         } else {
-            sendMessage(server, "命令执行失败");
+            sendMessage(server, "命令执行失败\n");
             sendMessage(server, getSupportCommandMsg().c_str());
         }
     }
